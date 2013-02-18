@@ -16,3 +16,4 @@ http://www.hardwareluxx.de/community/f141/serielles-lcd-ansteuern-hitachi-lm200-
 9:Vee -5V 液晶パネル駆動用電源。
 10:コントラスト調整用。5VとGND間にVRを入れて、電圧を調整することにより、液晶のコントラストを調整できる。
 
+
