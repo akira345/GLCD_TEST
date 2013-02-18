@@ -3,7 +3,8 @@ GLCD_TEST
 Arduino UNOで正体不明グラフィック液晶を動かしてみました。  
 使用チップはHD44104です。（例によってデータシートは見つかりませんでした。）  
 入手した型番：LM523という液晶側のピンアサインは以下のとおりです。  
-http://www.hardwareluxx.de/community/f141/serielles-lcd-ansteuern-hitachi-lm200-72514-print.htmlより  
+[hardwareluxx](http://www.hardwareluxx.de/community/f141/serielles-lcd-ansteuern-hitachi-lm200-72514-print.html "hardwareluxx")
+より  
   
 1:D1 上位32ライン分表示用シリアルデータ  
 2:FLM First Line Marker スタートラインを示す信号  
