@@ -3,12 +3,12 @@
 //64*240dot
 
 //ピン定義
-#define D1 0 //上半分シリアルデータ
+#define D1 0   //上半分シリアルデータ
 #define FLM 1  //First Line Maker　先頭ライン識別信号
-#define M 2  //制御方法が分からなかったので未使用
+#define M 2    //液晶の表示をコントロールする信号。1フレームごとにH/Lを切り替えて送信
 #define CL1 3  //シフトレジスタラッチ信号。1ライン描画データを送信毎にHigh
 #define CL2 4  //シリアルデータクロック
-#define D2 5  //下半分シリアルデータ。VRAMの関係で未使用
+#define D2 5   //下半分シリアルデータ。VRAMの関係で未使用
 
 //VRAM(Y,X)
 uint8_t vram [32][30];  //本当は[64][30]としたいが、メモリが足りないので高さ半分
@@ -64,6 +64,7 @@ void setup(){
   digitalWrite(CL2,HIGH);
   */
   digitalWrite(FLM,HIGH);  //FLMは一番最初の1ラインだけはHighにしないといけないみたい。
+  digitalWrite(M,LOW);
   //今回はVRAMの関係で下半分の描画はなし
   digitalWrite(D2,LOW);
   //VRAMクリア
@@ -84,6 +85,7 @@ void clear_vram(){
 }
 void output_lcd(){
   uint8_t tmp ;
+  uint8_t state = 0;//Mのフラグ管理
   //uint8_t tmp2;
   for(uint8_t y=0;y<32;++y){
     //縦ループ
@@ -138,6 +140,13 @@ void output_lcd(){
     //digitalWrite(FLM,LOW);
     //1ライン転送したので、Loにする
     *out_FLM &= ~bit_FLM;
+    //Mを操作(1フレーム転送ごとにH/L切り替え
+    state = 1- state;
+    if (state ==1){
+      *out_M |= bit_M;
+    }else{
+      *out_M &= ~bit_M;
+    }
   }
   //1ライン転送完了
   //digitalWrite(FLM,HIGH);
