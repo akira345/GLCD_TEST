@@ -55,14 +55,14 @@ void setup(){
   //動かないときは空クロックを送ると動いたりする。（Wait??)
   /*
   digitalWrite(D1,LOW);
-  digitalWrite(D2,LOW);
-  digitalWrite(CL1,LOW);
-  digitalWrite(CL2,HIGH);
-  digitalWrite(CL1,HIGH);
-  digitalWrite(CL2,LOW);
-  digitalWrite(CL1,LOW);
-  digitalWrite(CL2,HIGH);
-  */
+   digitalWrite(D2,LOW);
+   digitalWrite(CL1,LOW);
+   digitalWrite(CL2,HIGH);
+   digitalWrite(CL1,HIGH);
+   digitalWrite(CL2,LOW);
+   digitalWrite(CL1,LOW);
+   digitalWrite(CL2,HIGH);
+   */
   digitalWrite(FLM,HIGH);  //FLMは一番最初の1ラインだけはHighにしないといけないみたい。
   digitalWrite(M,LOW);
   //今回はVRAMの関係で下半分の描画はなし
@@ -81,7 +81,7 @@ void clear_vram(){
     }
   }
   //表示テストデータ
-  vram[0][0]=0x80;
+  //vram[0][0]=0x80;
 }
 void output_lcd(){
   uint8_t tmp ;
@@ -98,25 +98,25 @@ void output_lcd(){
         //D1とD2を両方セットした後確定クロックを送信しないといけないので、ShiftOut関数が使えない。
         //(今回はD1だけなので使えるけど）
 
-       //指定したビットだけ立てる
-       // 例）2 And 0x80 
-       // 00000010 And 10000000 = 00000000
+        //指定したビットだけ立てる
+        // 例）2 And 0x80 
+        // 00000010 And 10000000 = 00000000
         if (tmp & 0x80){
-           *out_D1 |= bit_D1;//Hi
+          *out_D1 |= bit_D1;//Hi
           //digitalWrite(D1,HIGH);
         }
         else{
           *out_D1 &= ~bit_D1;//Lo
-         //digitalWrite(D1,LOW);
+          //digitalWrite(D1,LOW);
         }
         /*
         if (tmp2 & 0x80){
-          *out_D2 |= bit_D2;
-        }
-        else{
-          *out_D2 &= ~bit_D2;
-        }
-        */
+         *out_D2 |= bit_D2;
+         }
+         else{
+         *out_D2 &= ~bit_D2;
+         }
+         */
         //送信クロック
         //digitalWrite(CL2,LOW);
         *out_CL2 &= ~bit_CL2; //Lo
@@ -144,7 +144,8 @@ void output_lcd(){
     state = 1- state;
     if (state ==1){
       *out_M |= bit_M;
-    }else{
+    }
+    else{
       *out_M &= ~bit_M;
     }
   }
@@ -154,8 +155,26 @@ void output_lcd(){
 }
 void loop(){
   // delay(1000);
-  output_lcd();
+  //output_lcd();
+  test_write();
 }
+void test_write(){
+  //動作チェック用
+  uint8_t tmp;
+  for (uint8_t y=0;y<32;++y){
+    for(uint8_t x=0;x<30;++x){
+      tmp=0x80;
+      for(uint8_t i=0;i<8;++i){
+        vram[y][x] = vram[y][x]+tmp;
+        tmp >>=1;
+        output_lcd();
+        //clear_vram();
+      }
+    }
+  }
+  clear_vram();
+}
+
 
 
 
